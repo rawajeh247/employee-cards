@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Business Card</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F5F0EB;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 380px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  .banner {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .banner-logo {
+    height: 36px;
+    max-width: 180px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .banner-name {
+    color: rgba(255,255,255,0.92);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .avatar-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: -32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    object-fit: cover;
+    background: #e8ddd4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: #8A603E;
+    overflow: hidden;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info {
+    text-align: center;
+    padding: 12px 24px 0;
+  }
+
+  .name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.3px;
+  }
+
+  .job-title {
+    font-size: 14px;
+    color: #666;
+    margin-top: 3px;
+    font-weight: 400;
+  }
+
+  .company {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #f0ebe5;
+    margin: 16px 24px;
+  }
+
+  .contacts {
+    padding: 0 24px;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #f5f0eb;
+  }
+
+  .contact-row:last-child {
+    border-bottom: none;
+  }
+
+  .contact-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .contact-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .contact-label {
+    font-size: 11px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .contact-value {
+    font-size: 14px;
+    color: #1a1a1a;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .save-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 48px);
+    margin: 16px 24px 24px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    text-decoration: none;
+  }
+
+  .save-btn:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+
+  .save-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1a1a1a;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    z-index: 100;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px 24px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  .error-state {
+    text-align: center;
+    padding: 60px 24px;
+  }
+
+  .error-state h2 {
+    font-size: 18px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+  }
+
+  .error-state p {
+    font-size: 14px;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+  <div class="loading">Loading contact...</div>
+</div>
+
+<div class="toast" id="toast">Contact saved ✓</div>
+
+<script>
+  // ─── CONFIGURATION ───────────────────────────────────────────────
+  // Replace this URL with your actual Power Automate HTTP flow URL
+  // The flow should accept ?id=SLUG and return JSON with employee data
+  // OR: use the static employee data approach below for the pilot
+  // ─────────────────────────────────────────────────────────────────
+
+  // Get employee ID from URL parameter: ?id=OB
+  const params = new URLSearchParams(window.location.search);
+  const employeeId = params.get('id');
+
+  // ─── STATIC DATA FOR PILOT ───────────────────────────────────────
+  // For the pilot, add each employee's data here.
+  // When scaling to 100 users, replace this with a live API call.
+  const employees = {
+    "OB": {
+      name: "Omer Berhan",
+      jobTitle: "IT Manager",
+      company: "Rawajeh Holding",
+      phone: "0553030487",
+      email: "oberhan@rawajeh.com",
+      photo: "", // paste direct photo URL here, or leave empty for initials
+      primaryColor: "#8A603E",
+      logoUrl: "" // paste direct logo URL here, or leave empty for company name text
+    }
+    // Add more employees here as you scale:
+    // "SF": {
+    //   name: "Sara Al-Faisal",
+    //   jobTitle: "Maintenance Manager",
+    //   company: "Rawajeh Holding",
+    //   phone: "0551234567",
+    //   email: "sara.f@rawajeh.com",
+    //   photo: "",
+    //   primaryColor: "#8A603E",
+    //   logoUrl: ""
+    // }
+  };
+
+  function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  }
+
+  function buildVCard(emp) {
+    return [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `N:${emp.name};;;`,
+      `FN:${emp.name}`,
+      `ORG:${emp.company}`,
+      `TITLE:${emp.jobTitle}`,
+      `TEL;TYPE=CELL:${emp.phone}`,
+      `EMAIL:${emp.email}`,
+      'END:VCARD'
+    ].join('\r\n');
+  }
+
+  function saveContact(emp) {
+    const vcard = buildVCard(emp);
+    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${emp.name}.vcf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Show toast
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function renderCard(emp) {
+    const color = emp.primaryColor || '#8A603E';
+    const card = document.getElementById('card');
+
+    const avatarContent = emp.photo
+      ? `<img src="${emp.photo}" alt="${emp.name}" onerror="this.style.display='none';this.parentElement.textContent='${getInitials(emp.name)}'">`
+      : getInitials(emp.name);
+
+    const logoContent = emp.logoUrl
+      ? `<img class="banner-logo" src="${emp.logoUrl}" alt="${emp.company}">`
+      : `<span class="banner-name">${emp.company}</span>`;
+
+    card.innerHTML = `
+      <div class="banner" style="background:${color}">
+        ${logoContent}
+      </div>
+
+      <div class="avatar-wrap">
+        <div class="avatar" style="color:${color}">
+          ${emp.photo ? `<img src="${emp.photo}" alt="${emp.name}">` : getInitials(emp.name)}
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="name">${emp.name}</div>
+        <div class="job-title">${emp.jobTitle}</div>
+        <div class="company" style="color:${color}">${emp.company}</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="contacts">
+        <a class="contact-row" href="tel:${emp.phone}">
+          <div class="contact-icon" style="background:${color}18">
+            <svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .92h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.77a16 16 0 006.29 6.29l1.17-1.17a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-value">${emp.phone}</div>
+          </div>
+        </a>
+
+        <a class="contact-row" href="mailto:${emp.email}">
+          <div class="contact-icon" style="background:${color}18">
+            <svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">${emp.email}</div>
+          </div>
+        </a>
+      </div>
+
+      <button class="save-btn" style="background:${color}" onclick="saveContact(window._emp)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Save Contact
+      </button>
+    `;
+
+    // Store employee data for button onclick
+    window._emp = emp;
+  }
+
+  function showError() {
+    document.getElementById('card').innerHTML = `
+      <div class="error-state">
+        <h2>Card not found</h2>
+        <p>This contact card link may be invalid or expired.</p>
+      </div>
+    `;
+  }
+
+  // ─── MAIN ─────────────────────────────────────────────────────────
+  if (!employeeId || !employees[employeeId]) {
+    showError();
+  } else {
+    renderCard(employees[employeeId]);
+  }
+</script>
+</body>
+</html>
