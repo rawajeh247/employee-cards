@@ -37,11 +37,12 @@
     }
 
     .logo {
-      height: 36px;
+      height: 38px;
       width: auto;
+      max-width: 160px;
       object-fit: contain;
       filter: brightness(0) invert(1);
-      opacity: 0.92;
+      opacity: 0.95;
     }
 
     /* ── Avatar ── */
@@ -111,13 +112,13 @@
 
     .contact-list li {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 14px;
     }
 
     .icon-wrap {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 10px;
       background: #f5ede4;
       display: flex;
@@ -139,7 +140,7 @@
     }
 
     .contact-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: #a89080;
       text-transform: uppercase;
       letter-spacing: 0.07em;
@@ -167,8 +168,8 @@
     }
 
     .social-btn {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: #f5ede4;
       display: flex;
@@ -194,7 +195,10 @@
 
     /* ── Save button ── */
     .save-btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
       padding: 14px;
       background: #503824;
@@ -210,6 +214,7 @@
       text-transform: uppercase;
     }
 
+    .save-btn svg { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
     .save-btn:hover { background: #3a2718; transform: translateY(-1px); }
     .save-btn:active { transform: translateY(0); }
 
@@ -236,7 +241,8 @@
 
   <!-- Banner -->
   <div class="banner">
-    <img src="images/Rawajeh-Logo.png" alt="Rawajeh" class="logo" />
+    <img src="images/Rawajeh-Logo.png" alt="Rawajeh" class="logo"
+         onerror="this.style.filter='none';this.style.background='transparent';this.onerror=null;" />
     <div class="avatar-wrap">
       <img src="images/OB.png" alt="Omer Berhan" class="avatar" id="avatar" />
     </div>
@@ -252,13 +258,14 @@
 
     <ul class="contact-list">
 
-      <!-- Phone -->
+      <!-- Mobile -->
       <li>
         <div class="icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.36 11.36 0 0 0 3.56.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.61 21 3 14.39 3 6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.56a1 1 0 0 1-.25 1.01l-2.2 2.22z"/></svg>
+          <!-- smartphone icon -->
+          <svg viewBox="0 0 24 24"><path d="M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-5 18a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5-4H7V5h10v11z"/></svg>
         </div>
         <div class="contact-text">
-          <span class="contact-label">Phone / Ext</span>
+          <span class="contact-label">Mobile</span>
           <a class="contact-value" href="tel:+966920016290" id="phone">9200 1629 Ext 123</a>
         </div>
       </li>
@@ -274,83 +281,68 @@
         </div>
       </li>
 
-      <!-- Website -->
-      <li>
-        <div class="icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 17.93V18a1 1 0 0 0-1-1H8l-1-1v-1l1-1h2a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H9l-3-3a8 8 0 0 1 5-2.93V8a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V6.07A8.01 8.01 0 0 1 20 12h-2a2 2 0 0 0-2 2v2l-2 2v1.93z"/></svg>
-        </div>
-        <div class="contact-text">
-          <span class="contact-label">Website</span>
-          <a class="contact-value" href="https://www.rawajeh.com" target="_blank" id="website">www.rawajeh.com</a>
-        </div>
-      </li>
-
     </ul>
 
-    <!-- Social -->
+    <!-- Social: LinkedIn · X · Website -->
     <div class="social-row">
 
-      <!-- LinkedIn -->
       <a class="social-btn" href="https://www.linkedin.com/company/rawajeh-group/" target="_blank" aria-label="LinkedIn">
         <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
 
-      <!-- X / Twitter -->
       <a class="social-btn" href="https://x.com/rawajeh_group?s=21&t=TYO145M7OjCt98gSCjJsuA" target="_blank" aria-label="X">
         <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
       </a>
 
-      <!-- Website globe (shortcut) -->
       <a class="social-btn" href="https://www.rawajeh.com" target="_blank" aria-label="Website">
-        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 17.93V18a1 1 0 0 0-1-1H8l-1-1v-1l1-1h2a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H9l-3-3a8 8 0 0 1 5-2.93V8a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V6.07A8.01 8.01 0 0 1 20 12h-2a2 2 0 0 0-2 2v2l-2 2v1.93z"/></svg>
+        <!-- globe icon -->
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
       </a>
 
     </div>
 
-    <!-- Save Contact -->
-    <button class="save-btn" onclick="saveContact()">💾 Save Contact</button>
+    <!-- Save Contact – SVG icon, no emoji -->
+    <button class="save-btn" onclick="saveContact()">
+      <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
+      Save Contact
+    </button>
   </div>
 
 </div>
 
 <script>
-  // ── Read URL params ──────────────────────────────────────────────
-  const params   = new URLSearchParams(window.location.search);
-  const id       = (params.get('id') || 'OB').toUpperCase();
+  const params = new URLSearchParams(window.location.search);
+  const id     = (params.get('id') || 'OB').toUpperCase();
 
-  // ── Employee data ────────────────────────────────────────────────
   const employees = {
     OB: {
-      name:    'Omer Berhan',
-      title:   'IT Manager',
-      company: 'Rawajeh Holding',
-      phone:   '+966920016290',
+      name:         'Omer Berhan',
+      title:        'IT Manager',
+      company:      'Rawajeh Holding',
+      phone:        '+966920016290',
       phoneDisplay: '9200 1629 Ext 123',
-      ext:     '123',
-      email:   'o.berhan@rawajeh.com',
-      website: 'https://www.rawajeh.com',
+      email:        'o.berhan@rawajeh.com',
+      website:      'https://www.rawajeh.com',
     }
   };
 
   const emp = employees[id];
 
   if (emp) {
-    document.getElementById('name').textContent        = emp.name;
-    document.getElementById('title').textContent       = emp.title;
-    document.getElementById('company').textContent     = emp.company;
-    document.getElementById('phone').textContent       = emp.phoneDisplay;
-    document.getElementById('phone').href              = 'tel:' + emp.phone;
-    document.getElementById('email').textContent       = emp.email;
-    document.getElementById('email').href              = 'mailto:' + emp.email;
-    document.getElementById('avatar').src              = 'images/' + id + '.png';
-    document.getElementById('avatar').alt              = emp.name;
-    document.title                                     = emp.name + ' – ' + emp.company;
+    document.getElementById('name').textContent    = emp.name;
+    document.getElementById('title').textContent   = emp.title;
+    document.getElementById('company').textContent = emp.company;
+    document.getElementById('phone').textContent   = emp.phoneDisplay;
+    document.getElementById('phone').href          = 'tel:' + emp.phone;
+    document.getElementById('email').textContent   = emp.email;
+    document.getElementById('email').href          = 'mailto:' + emp.email;
+    document.getElementById('avatar').src          = 'images/' + id + '.png';
+    document.getElementById('avatar').alt          = emp.name;
+    document.title                                 = emp.name + ' – ' + emp.company;
   }
 
-  // ── Save Contact (vCard) ──────────────────────────────────────────
   function saveContact() {
     if (!emp) return;
-
     const vcard = [
       'BEGIN:VCARD',
       'VERSION:3.0',
