@@ -158,7 +158,7 @@ function fmtPhone(n) {
   if (!n) return '';
   var s = String(n).trim();
   if (s.startsWith('966')) s = s.slice(3);
-  if (s.length === 9) return s.slice(0,4) + ' ' + s.slice(4,8) + ' ' + s.slice(8);
+  if (s.length === 9) return s.slice(0,5) + ' ' + s.slice(5);
   return s;
 }
 
