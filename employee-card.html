@@ -143,62 +143,58 @@
 </div>
 
 <script>
-// ── Format mobile: 966XXXXXXXXX → 05XXXXXXXXX, short numbers keep as-is
 function fmtMobile(n) {
   if (!n) return '';
   var s = String(n).trim();
   if (s.startsWith('966') && s.length >= 12) return '0' + s.slice(3);
-  if (s.startsWith('91')  && s.length >= 12) return '+' + s; // Indian numbers
-  if (s.length <= 9) return '0' + s; // Luxury short numbers
+  if (s.startsWith('91')  && s.length >= 12) return '+' + s;
   return s;
 }
 
-// ── Format office phone: 966920001269 → 9200 0126 9
-function fmtPhone(n) {
+function fmtPhone(n, ext) {
   if (!n) return '';
   var s = String(n).trim();
   if (s.startsWith('966')) s = s.slice(3);
-  if (s.length === 9) return s.slice(0,5) + ' ' + s.slice(5);
-  return s;
+  var base = s.length === 9 ? s.slice(0,5) + ' ' + s.slice(5) : s;
+  return ext && ext !== '0' ? base + ' Ext ' + ext : base;
 }
 
-// ── Employee data ───────────────────────────────────────────────────
 var employees = {
-  AA:  { name:'Aqeel Alrajhi',           title:'Group CEO',                          company:'Rawajeh Holding',      mobile:'966551717684', phone:'966920001269', email:'aalrajhi@rawajeh.com' },
-  AD:  { name:'Abdullah Aldayel',        title:'Marketing & Communication Director', company:'Rawajeh Holding',      mobile:'966536167033', phone:'966920001269', email:'aaldayel@rawajeh.com' },
-  ADB: { name:'Adnan Baqatian',          title:'Maintenance Manager',                company:'Wasf RealEstate',      mobile:'966533395051', phone:'966920001269', email:'abaqatian@wasf.com.sa' },
-  AI:  { name:'Ali Ibrahim',             title:'Director of Shareholders Management',company:'Rawajeh Holding',      mobile:'966555439552', phone:'966920001269', email:'aibrahim@rawajeh.com' },
-  AJ:  { name:'Anuj Jain',              title:'Chief Investment Officer',            company:'Rawajeh Investment',   mobile:'919910607779', phone:'966920001269', email:'ajain@rawajeh.com' },
-  AK:  { name:'Abdulaziz Alkhodair',     title:'Legal & Governance Director',        company:'Rawajeh Holding',      mobile:'966553300896', phone:'966920001269', email:'aalkhodair@rawajeh.com' },
-  ALD: { name:'Abdulelah Aldrees',       title:'Operations Manager',                 company:'Wasf RealEstate',      mobile:'966533314574', phone:'966920001269', email:'aaldrees@wasf.com.sa' },
-  ALN: { name:'Alneerah Alshalawi',      title:'HR Manager',                         company:'Rawajeh Luxury',       mobile:'558868966',    phone:'',             email:'alneerah@arrqa.com' },
-  ALZ: { name:'Alzahraa Abuljadayel',   title:'Retail Manager',                     company:'Rawajeh Luxury',       mobile:'551500881',    phone:'',             email:'sultana@arrqa.com' },
-  AN:  { name:'Abdullah Alnasser',       title:'Commercial Director',                company:'Wasf RealEstate',      mobile:'966502250056', phone:'966920001269', email:'aalnasser@wasf.com.sa' },
-  ASW: { name:'Abdulaziz Alswailem',    title:'CEO',                                company:'Rawajeh Development',  mobile:'966566668826', phone:'966920001269', email:'Aalswailem@rawajeh.com' },
-  AW:  { name:'Ahmad Amro',             title:'Projects Manager',                   company:'Rawajeh Development',  mobile:'966564757719', phone:'966920001269', email:'aamro@rawajeh.com' },
-  CL:  { name:'Coralie Lowicki',         title:'Strategic Planning Manager',         company:'Rawajeh Luxury',       mobile:'532336419',    phone:'',             email:'c.lowicki@athmn.com' },
-  FB:  { name:'Fawaz Bedaiwi',           title:'Chief Shareholder Affairs Officer',  company:'Rawajeh Holding',      mobile:'966555380033', phone:'966920001269', email:'fbedaiwi@rawajeh.com' },
-  FG:  { name:'Faisal Alghamdi',         title:'Group CSSO',                         company:'Rawajeh Holding',      mobile:'966599997123', phone:'966920001269', email:'falghamdi@rawajeh.com' },
-  FM:  { name:'Fadi Mounsef',            title:'CEO',                                company:'Rawajeh Luxury',       mobile:'551677011',    phone:'',             email:'Fadi@arrqa.com' },
-  HM:  { name:'Hatem Mohammad',          title:'Corporate Account Manager',          company:'Rawajeh Holding',      mobile:'966543925405', phone:'966920001269', email:'hmohammad@rawajeh.com' },
-  HZ:  { name:'Haitham Alzatara',        title:'Finance Manager',                    company:'Rawajeh Holding',      mobile:'966591148622', phone:'966920001269', email:'Halzaatreh@rawajeh.com' },
-  IA:  { name:'Ismail Alshammari',       title:'Head of Projects',                   company:'Rawajeh Luxury',       mobile:'547795507',    phone:'',             email:'ismail@arrqa.com' },
-  KH:  { name:'Khalid Alhedaithy',       title:'CEO',                                company:'Wasf RealEstate',      mobile:'966505441882', phone:'966920001269', email:'kalhedaithy@wasf.com.sa' },
-  MA:  { name:'Marwan Abou Ammar',       title:'Accounting Manager',                 company:'Rawajeh Luxury',       mobile:'568219849',    phone:'',             email:'marwan@arrqa.com' },
-  MAJ: { name:'Mohammad Abu Jamous',     title:'Group CFO',                          company:'Rawajeh Holding',      mobile:'966555107684', phone:'966920001269', email:'mabujamous@rawajeh.com' },
-  MG:  { name:'Molham Ghazy',            title:'Facilities Management Manager',      company:'Wasf RealEstate',      mobile:'966533223118', phone:'966920001269', email:'mghazy@wasf.com.sa' },
-  MN:  { name:'Mohammed Nafee',          title:'Finance Manager',                    company:'Rawajeh Development',  mobile:'966530092618', phone:'966920001269', email:'mnafee@rawajeh.com' },
-  MSD: { name:'Mohamad Soueid',          title:'Head of Retail Operations',          company:'Rawajeh Luxury',       mobile:'569242492',    phone:'',             email:'M.Soueid@athmn.com' },
-  MSQ: { name:'Muhannad Alshayiq',       title:'Deputy Chief Executive Officer',     company:'Rawajeh Real Estate',  mobile:'966543681850', phone:'966920001269', email:'malshayiq@rawajeh.com' },
-  NA:  { name:'Nishima Arora',           title:'Vice President',                     company:'Rawajeh Investment',   mobile:'919910607779', phone:'966920001269', email:'narora@rawajeh.com' },
-  NE:  { name:'Nermin Elsayed',          title:'Customer Experience Manager',        company:'Rawajeh Luxury',       mobile:'566252516',    phone:'',             email:'Nermeen@athmn.com' },
-  OB:  { name:'Omer Berhan',             title:'IT Manager',                         company:'Rawajeh Holding',      mobile:'966553030487', phone:'966920001269', email:'oberhan@rawajeh.com' },
-  RZ:  { name:'Rifat Zidan',             title:'VIP Clients Manager',                company:'Rawajeh Luxury',       mobile:'565005300',    phone:'',             email:'rifaat@arrqa.com' },
-  VJ:  { name:'Varun Jain',              title:'Vice President',                     company:'Rawajeh Investment',   mobile:'918826482538', phone:'966920001269', email:'vjain@rawajeh.com' },
-  YA:  { name:'Yasser Abdo',             title:'Financial Reporting Manager',        company:'Rawajeh Holding',      mobile:'966566891791', phone:'966920001269', email:'yabdo@rawajeh.com' },
+  AA:  { name:'Aqeel Alrajhi',              title:'Group CEO',                           company:'Rawajeh Holding',      mobile:'966551717684', phone:'966920001269', ext:'222',  email:'aalrajhi@rawajeh.com' },
+  AD:  { name:'Abdullah Aldayel',           title:'Marketing & Communication Director',  company:'Rawajeh Holding',      mobile:'966536167033', phone:'966920001269', ext:'930',  email:'aaldayel@rawajeh.com' },
+  ADB: { name:'Adnan Baqatian',             title:'Maintenance Manager',                 company:'Wasf RealEstate',      mobile:'966533395051', phone:'966920001269', ext:'523',  email:'abaqatian@wasf.com.sa' },
+  AI:  { name:'Ali Ibrahim',                title:'Director of Shareholders Management', company:'Rawajeh Holding',      mobile:'966555439552', phone:'966920001269', ext:'160',  email:'aibrahim@rawajeh.com' },
+  AJ:  { name:'Anuj Jain',                 title:'Chief Investment Officer',             company:'Rawajeh Investment',   mobile:'919910607779', phone:'966920001269', ext:'',     email:'ajain@rawajeh.com' },
+  AK:  { name:'Abdulaziz Alkhodair',        title:'Legal & Governance Director',         company:'Rawajeh Holding',      mobile:'966553300896', phone:'966920001269', ext:'210',  email:'aalkhodair@rawajeh.com' },
+  ALD: { name:'Abdulelah Aldrees',          title:'Operations Manager',                  company:'Wasf RealEstate',      mobile:'966533314574', phone:'966920001269', ext:'521',  email:'aaldrees@wasf.com.sa' },
+  ALN: { name:'Alneerah Alshalawi',         title:'HR Manager',                          company:'Rawajeh Luxury',       mobile:'966558868966', phone:'966920001269', ext:'610',  email:'alneerah@arrqa.com' },
+  ALZ: { name:'Alzahraa Abuljadayel',      title:'Retail Manager',                      company:'Rawajeh Luxury',       mobile:'966551500881', phone:'966920001269', ext:'630',  email:'sultana@arrqa.com' },
+  AN:  { name:'Abdullah Alnasser',          title:'Commercial Director',                 company:'Wasf RealEstate',      mobile:'966502250056', phone:'966920001269', ext:'510',  email:'aalnasser@wasf.com.sa' },
+  ASW: { name:'Abdulaziz Alswailem',       title:'CEO',                                 company:'Rawajeh Development',  mobile:'966566668826', phone:'966920001269', ext:'444',  email:'Aalswailem@rawajeh.com' },
+  AW:  { name:'Ahmad Amro',               title:'Projects Manager',                    company:'Rawajeh Development',  mobile:'966564757719', phone:'966920001269', ext:'410',  email:'aamro@rawajeh.com' },
+  CL:  { name:'Coralie Lowicki',            title:'Strategic Planning Manager',          company:'Rawajeh Luxury',       mobile:'966532336419', phone:'966920001269', ext:'650',  email:'c.lowicki@athmn.com' },
+  FB:  { name:'Fawaz Bedaiwi',              title:'Chief Shareholder Affairs Officer',   company:'Rawajeh Holding',      mobile:'966555380033', phone:'966920001269', ext:'150',  email:'fbedaiwi@rawajeh.com' },
+  FG:  { name:'Faisal Alghamdi',            title:'Group CSSO',                          company:'Rawajeh Holding',      mobile:'966599997123', phone:'966920001269', ext:'999',  email:'falghamdi@rawajeh.com' },
+  FM:  { name:'Fadi Mounsef',               title:'CEO',                                 company:'Rawajeh Luxury',       mobile:'966551677011', phone:'966920001269', ext:'666',  email:'Fadi@arrqa.com' },
+  FR:  { name:'Fawaz Bin Saleh Al Rajhi',   title:'Vice Chairman & Managing Director',   company:'Rawajeh Holding',      mobile:'966599994444', phone:'966920001269', ext:'111',  email:'Fawazalrajhi@rawajeh.com' },
+  HM:  { name:'Hatem Mohammad',             title:'Corporate Account Manager',           company:'Rawajeh Holding',      mobile:'966543925405', phone:'966920001269', ext:'340',  email:'hmohammad@rawajeh.com' },
+  HZ:  { name:'Haitham Alzatara',           title:'Finance Manager',                     company:'Rawajeh Holding',      mobile:'966591148622', phone:'966920001269', ext:'310',  email:'Halzaatreh@rawajeh.com' },
+  IA:  { name:'Ismail Alshammari',          title:'Head of Projects',                    company:'Rawajeh Luxury',       mobile:'966547795507', phone:'966920001269', ext:'633',  email:'ismail@arrqa.com' },
+  KH:  { name:'Khalid Alhedaithy',          title:'CEO',                                 company:'Wasf RealEstate',      mobile:'966505441882', phone:'966920001269', ext:'555',  email:'kalhedaithy@wasf.com.sa' },
+  MA:  { name:'Marwan Abou Ammar',          title:'Accounting Manager',                  company:'Rawajeh Luxury',       mobile:'966568219849', phone:'966920001269', ext:'620',  email:'marwan@arrqa.com' },
+  MAJ: { name:'Mohammad Abu Jamous',        title:'Group CFO',                           company:'Rawajeh Holding',      mobile:'966555107684', phone:'966920001269', ext:'333',  email:'mabujamous@rawajeh.com' },
+  MG:  { name:'Molham Ghazy',               title:'Facilities Management Manager',       company:'Wasf RealEstate',      mobile:'966533223118', phone:'966920001269', ext:'520',  email:'mghazy@wasf.com.sa' },
+  MN:  { name:'Mohammed Nafee',             title:'Finance Manager',                     company:'Rawajeh Development',  mobile:'966530092618', phone:'966920001269', ext:'420',  email:'mnafee@rawajeh.com' },
+  MSD: { name:'Mohamad Soueid',             title:'Head of Retail Operations',           company:'Rawajeh Luxury',       mobile:'966569242492', phone:'966920001269', ext:'631',  email:'M.Soueid@athmn.com' },
+  MSQ: { name:'Muhannad Alshayiq',          title:'Deputy Chief Executive Officer',      company:'Rawajeh Real Estate',  mobile:'966543681850', phone:'966920001269', ext:'130',  email:'malshayiq@rawajeh.com' },
+  NA:  { name:'Nishima Arora',              title:'Vice President',                      company:'Rawajeh Investment',   mobile:'919910607779', phone:'966920001269', ext:'',     email:'narora@rawajeh.com' },
+  NE:  { name:'Nermin Elsayed',             title:'Customer Experience Manager',         company:'Rawajeh Luxury',       mobile:'966566252516', phone:'966920001269', ext:'670',  email:'Nermeen@athmn.com' },
+  OB:  { name:'Omer Berhan',                title:'IT Manager',                          company:'Rawajeh Holding',      mobile:'966553030487', phone:'966920001269', ext:'920',  email:'oberhan@rawajeh.com' },
+  RZ:  { name:'Rifat Zidan',                title:'VIP Clients Manager',                 company:'Rawajeh Luxury',       mobile:'966565005300', phone:'966920001269', ext:'680',  email:'rifaat@arrqa.com' },
+  VJ:  { name:'Varun Jain',                 title:'Vice President',                      company:'Rawajeh Investment',   mobile:'918826482538', phone:'966920001269', ext:'',     email:'vjain@rawajeh.com' },
+  YA:  { name:'Yasser Abdo',                title:'Financial Reporting Manager',         company:'Rawajeh Holding',      mobile:'966566891791', phone:'966920001269', ext:'320',  email:'yabdo@rawajeh.com' },
 };
 
-// ── Render ──────────────────────────────────────────────────────────
 var params = new URLSearchParams(window.location.search);
 var id     = (params.get('id') || '').toUpperCase();
 var emp    = employees[id];
@@ -221,9 +217,10 @@ if (!emp) {
     html += '<li><div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-5 18a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5-4H7V5h10v11z"/></svg></div><div class="contact-text"><span class="contact-label">Mobile</span><a class="contact-value" href="tel:+' + emp.mobile + '">' + mob + '</a></div></li>';
   }
 
-  if (emp.phone && emp.phone !== emp.mobile) {
-    var ph = fmtPhone(emp.phone);
-    html += '<li><div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.36 11.36 0 0 0 3.56.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.61 21 3 14.39 3 6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.56a1 1 0 0 1-.25 1.01l-2.2 2.22z"/></svg></div><div class="contact-text"><span class="contact-label">Phone</span><a class="contact-value" href="tel:+' + emp.phone + '">' + ph + '</a></div></li>';
+  if (emp.phone) {
+    var ph = fmtPhone(emp.phone, emp.ext);
+    var phLabel = emp.ext && emp.ext !== '0' ? 'Phone / Ext' : 'Phone';
+    html += '<li><div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.36 11.36 0 0 0 3.56.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.61 21 3 14.39 3 6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.56a1 1 0 0 1-.25 1.01l-2.2 2.22z"/></svg></div><div class="contact-text"><span class="contact-label">' + phLabel + '</span><a class="contact-value" href="tel:+' + emp.phone + '">' + ph + '</a></div></li>';
   }
 
   if (emp.email) {
@@ -233,7 +230,6 @@ if (!emp) {
   document.getElementById('contact-list').innerHTML = html;
 }
 
-// ── Save Contact ─────────────────────────────────────────────────────
 function saveContact() {
   if (!emp) return;
   var lines = ['BEGIN:VCARD','VERSION:3.0',
@@ -243,13 +239,12 @@ function saveContact() {
     'TITLE:' + emp.title,
   ];
   if (emp.mobile) lines.push('TEL;TYPE=CELL:+' + emp.mobile);
-  if (emp.phone && emp.phone !== emp.mobile) lines.push('TEL;TYPE=WORK,VOICE:+' + emp.phone);
+  if (emp.phone)  lines.push('TEL;TYPE=WORK,VOICE:+' + emp.phone);
   if (emp.email)  lines.push('EMAIL;TYPE=WORK:' + emp.email);
   lines.push('URL:https://www.rawajeh.com');
   lines.push('X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/company/rawajeh-group/');
   lines.push('X-SOCIALPROFILE;TYPE=twitter:https://x.com/rawajeh_group');
   lines.push('END:VCARD');
-
   var blob = new Blob([lines.join('\r\n')], { type: 'text/vcard' });
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
